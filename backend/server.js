@@ -3,6 +3,7 @@ const express = require("express");;
 const app = express();
 const path = require("path");
 const productRoutes = require("./routes/products");
+const userRoutes = require("./routes/user");
 const mongoose = require('mongoose');
 const flash = require("express-flash");
 const connectDB = require("./config/database");
@@ -32,6 +33,8 @@ app.use(flash());
 // Setup Routes For Which The Server Is Listening
 // when we fire request to this route right here I want you to use these routes 
 app.use('/api/products', productRoutes)
+app.use('/api/user', userRoutes)
+
 
 // 404 handler
 app.use((req, res) => {
