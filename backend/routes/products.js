@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../models/products")
 const productsController = require("../controllers/productController");
+const requireAuth = require('../middleware/requireAuth')
 
 
-//create instance of router 
+// require auth for all product routes
+router.use(requireAuth)
 
 // GET all products
-
 router.get('/', productsController.getProducts)
 
 // GET a single product
