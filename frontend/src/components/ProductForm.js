@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import { useProductsContext } from "../hooks/useProductsContext"
+import { useAuthContext } from '../hooks/useAuthContext'
 
 const ProductForm = () => {
   const { dispatch } = useProductsContext()
+  const { user } = useAuthContext()
+
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
   const [error, setError] = useState(null)
@@ -12,30 +15,34 @@ const ProductForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault() // prevents the default action of form submitting
 
+    if (!user) {
+      setError('You must be logged in')
+      return
+    }
+
     const product = {title, amount}
 
-    console.log(product)
-    const response = await fetch('/api/products', {
+    const response = await fetch('/api/products/', {
       method: 'POST',
       body: JSON.stringify(product),
-      headers:{
-        'Content-Type': 'application/json'
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
       }
     })
+
     const json = await response.json()
 
     if(!response.ok){
-      console.log('error')
       setError(json.error)
       setEmptyFields(json.emptyFields)
     }
     if(response.ok){
-      dispatch({type: 'CREATE_PRODUCT', payload: json})
       setTitle('')
       setAmount('')
       setError(null)
       setEmptyFields([])
-      console.log('new workout added', json)
+      dispatch({type: 'CREATE_PRODUCT', payload: json})
     }
   }
 

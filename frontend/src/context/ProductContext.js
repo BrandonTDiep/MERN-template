@@ -6,7 +6,6 @@ export const ProductsContext = createContext()
 export const productsReducer = (state, action) => {
     switch (action.type) {
         case 'SET_PRODUCTS':
-            console.log(state)
             return{
                 products: action.payload
             }
