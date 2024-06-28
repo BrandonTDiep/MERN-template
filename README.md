@@ -19,9 +19,9 @@
 
 ```
 # Please copy and paste this template into a new .env file
-PORT = 
-DB_STRING = 
-SECRET = 
+PORT = 3000 (can be any port example: 2121)
+DB_STRING = `your database URI`
+SECRET = `your custom JSON web token secret`
 ```
   
 ### Running the application
