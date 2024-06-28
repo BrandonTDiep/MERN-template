@@ -5,7 +5,9 @@ module.exports = {
 
     // get all producsts
     getProducts: async (req, res) => {
-        const products = await Product.find({}).sort({createdAt: -1})
+        const user_id = req.user._id
+
+        const products = await Product.find({user_id}).sort({createdAt: -1})
         res.status(200).json(products) //send it back as json
     },
 
@@ -45,7 +47,9 @@ module.exports = {
 
         // add doc to db
         try{
-            const product = await Product.create({title, amount})
+            const user_id = req.user._id
+            console.log(user_id)
+            const product = await Product.create({title, amount, user_id})
             res.status(200).json(product)
         } catch(error){
             res.status(400).json({error: error.message})
