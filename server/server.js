@@ -1,13 +1,9 @@
-const express = require("express");;
-// express app
+const express = require("express");
 const app = express();
 const path = require("path");
 const productRoutes = require("./routes/products");
 const userRoutes = require("./routes/user");
-const mongoose = require('mongoose');
-const flash = require("express-flash");
 const connectDB = require("./config/database");
-
 
 //Use .env file in config folder
 require("dotenv").config({ path: "./config/.env" });
@@ -16,7 +12,6 @@ require("dotenv").config({ path: "./config/.env" });
 //Body Parsing
 
 // any reqs that comes in and it looks like it has body to it , we're sending to the server and if it does and then attach it to the reqest object so we can access it in req handler
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -55,10 +50,10 @@ connectDB().then(() => {
       console.log("Server is running, you better catch it!");
     });
 
-  })
-  .catch((error) => {
-    console.log(error)
-  })
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 
 
 
