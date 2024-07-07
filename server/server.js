@@ -11,7 +11,7 @@ require("dotenv").config({ path: "./config/.env" });
 // Enable CORS for client origin only
 const cors = require('cors')
 const corsOptions = {
-   origin : ['https://localhost:3000'],
+   origin : ['https://mern-template-g1ny.onrender.com', 'https://localhost:3000'],
 }
 app.use(cors(corsOptions))
 
