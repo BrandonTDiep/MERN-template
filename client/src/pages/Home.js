@@ -6,6 +6,9 @@ import { useAuthContext } from "../hooks/useAuthContext"
 import ProductDetails from '../components/ProductDetails'
 import ProductForm from '../components/ProductForm'
 
+// utils & assets
+import axiosInstance from '../utils/axiosInstance'
+
 const Home = () => {
     
     const {products, dispatch} = useProductsContext();
@@ -14,15 +17,24 @@ const Home = () => {
     // useEffect will fire a component when rendered, want to only fire once, dependency array empty means fire only once
     useEffect(() => {
         const fetchProducts = async () => {
-            const response = await fetch('/api/products/', {
-                headers: {'Authorization': `Bearer ${user.token}`},
-            })
-
-            const json = await response.json()
-
-            if(response.ok){
-                dispatch({type: 'SET_PRODUCTS', payload: json})
+            try {
+                const response = await axiosInstance.get('/api/products', 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                });
+                dispatch({type: 'SET_PRODUCTS', payload: response.data})
+                if (user) {
+                    fetchProducts()
+                }
             }
+            catch(error) {
+                console.log(error)
+
+            }
+
         }
 
         if (user) {

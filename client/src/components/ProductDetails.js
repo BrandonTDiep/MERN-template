@@ -1,6 +1,9 @@
 import { useProductsContext } from "../hooks/useProductsContext"
 import { useAuthContext } from '../hooks/useAuthContext'
 
+// utils & assets
+import axiosInstance from '../utils/axiosInstance'
+
 const ProductDetails = ({ product }) => {
 
   const { dispatch } = useProductsContext()
@@ -11,18 +14,20 @@ const ProductDetails = ({ product }) => {
       return
     }
 
-    const response  = await fetch('/api/products/' + product._id, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${user.token}`
-      }
-    })
-
-    const json = await response.json()
-
-    if(response.ok){
-      dispatch({type: 'DELETE_PRODUCT', payload: json})
+    try {
+      const response  = await axiosInstance.delete('/api/products/' + product._id, 
+      {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      })
+      dispatch({type: 'DELETE_PRODUCT', payload: response.data})
+    } catch (error) {
+      console.error("Failed to delete the product", error);
     }
+    
+
+
   }
   return (
     <div className="product-details">

@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { useProductsContext } from "../hooks/useProductsContext"
 import { useAuthContext } from '../hooks/useAuthContext'
 
+// utils & assets
+import axiosInstance from '../utils/axiosInstance'
+
 const ProductForm = () => {
   const { dispatch } = useProductsContext()
   const { user } = useAuthContext()
@@ -22,27 +25,27 @@ const ProductForm = () => {
 
     const product = {title, amount}
 
-    const response = await fetch('/api/products/', {
-      method: 'POST',
-      body: JSON.stringify(product),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.token}`
-      }
-    })
+    try {
+      const response = await axiosInstance.post('/api/products/',
+        product,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+          }
+        }
+      )
 
-    const json = await response.json()
-
-    if(!response.ok){
-      setError(json.error)
-      setEmptyFields(json.emptyFields)
-    }
-    if(response.ok){
       setTitle('')
       setAmount('')
       setError(null)
       setEmptyFields([])
-      dispatch({type: 'CREATE_PRODUCT', payload: json})
+      dispatch({type: 'CREATE_PRODUCT', payload: response.data})
+
+    } catch (error) {
+      setError(error.response.data.error)
+      setEmptyFields(error.response.data.emptyFields)
+      
     }
   }
 

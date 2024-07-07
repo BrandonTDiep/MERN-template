@@ -8,6 +8,13 @@ const connectDB = require("./config/database");
 //Use .env file in config folder
 require("dotenv").config({ path: "./config/.env" });
 
+// Enable CORS for client origin only
+const cors = require('cors')
+const corsOptions = {
+   origin : ['https://localhost:3000'],
+}
+app.use(cors(corsOptions))
+
 //middleware
 //Body Parsing
 
@@ -20,10 +27,8 @@ app.use((req, res, next) => {
 })
 
 // Render React as View
-app.use(express.static(path.join(__dirname, "..", "frontend", "build")));
+app.use(express.static(path.join(__dirname, "..", "client", "build")));
 
-// Use flash messages for errors, info, ect...
-app.use(flash());
 
 // Setup Routes For Which The Server Is Listening
 // when we fire request to this route right here I want you to use these routes 
